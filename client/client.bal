@@ -55,17 +55,7 @@ public isolated client class Client {
     resource isolated function get programmes(map<string|string[]> headers = {}) returns Programme[]|error {
         string resourcePath = string `/programmes`;
         return self.clientEp->get(resourcePath, headers);
-    }
-
-    # Retrieve details of a specific programme by its programme code
-    #
-    # + headers - Headers to be sent with the request 
-    # + return - Details of the requested programme 
-    resource isolated function get programmes/[string programmeCode](map<string|string[]> headers = {}) returns Programme|error {
-        string resourcePath = string `/programmes/${getEncodedUri(programmeCode)}`;
-        return self.clientEp->get(resourcePath, headers);
-    }
-
+  
     # Retrieve all programmes belonging to a specific faculty
     #
     # + headers - Headers to be sent with the request 

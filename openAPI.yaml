@@ -1,0 +1,229 @@
+openapi: 3.0.0
+info:
+  title: Programme Management API
+  version: 1.0.0
+  description: API for managing programmes and courses in a university.
+
+servers:
+  - url: http://localhost:5000
+
+paths:
+  /programmes:
+    post:
+      summary: Add a new programme
+      operationId: addProgramme
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                programme_code:
+                  type: integer
+                programme_name:
+                  type: string
+                nqf_level:
+                  type: integer
+                faculty_name:
+                  type: string
+                department_name:
+                  type: string
+                registration_date:
+                  type: string
+                  format: date
+                review_date:
+                  type: string
+                  format: date
+      responses:
+        "200":
+          description: Programme added successfully
+          content:
+            text/plain:
+              schema:
+                type: string
+        "500":
+          description: Failed to add programme
+          content:
+            text/plain:
+              schema:
+                type: string
+
+    get:
+      summary: Get all programmes
+      operationId: getAllProgrammes
+      responses:
+        "200":
+          description: List of programmes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Programme"
+
+  /programmes/{programme_code}:
+    put:
+      summary: Update a programme
+      operationId: updateProgramme
+      parameters:
+        - name: programme_code
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Programme"
+      responses:
+        "200":
+          description: Programme updated successfully
+          content:
+            text/plain:
+              schema:
+                type: string
+        "404":
+          description: Programme not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+    delete:
+      summary: Delete a programme
+      operationId: deleteProgramme
+      parameters:
+        - name: programme_code
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Programme deleted successfully
+          content:
+            text/plain:
+              schema:
+                type: string
+        "500":
+          description: Failed to delete programme
+          content:
+            text/plain:
+              schema:
+                type: string
+
+    get:
+      summary: Get a programme by code
+      operationId: getProgrammeByCode
+      parameters:
+        - name: programme_code
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Programme details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Programme"
+        "404":
+          description: Programme not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /programmes/faculty/{faculty_name}:
+    get:
+      summary: Get programmes by faculty
+      operationId: getProgrammeByFaculty
+      parameters:
+        - name: faculty_name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of programmes in specified faculty
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Programme"
+        "404":
+          description: No programmes found in the specified faculty
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /programmes/due-for-review:
+    get:
+      summary: Get programmes due for review
+      operationId: getProgrammesDueForReview
+      responses:
+        "200":
+          description: List of programmes due for review
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Programme"
+        "404":
+          description: No programmes due for review
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+components:
+  schemas:
+    Programme:
+      type: object
+      properties:
+        programme_code:
+          type: integer
+        programme_name:
+          type: string
+        nqf_level:
+          type: integer
+        faculty_name:
+          type: string
+        department_name:
+          type: string
+        registration_date:
+          type: string
+          format: date
+        review_date:
+          type: string
+          format: date
+
+    Course:
+      type: object
+      properties:
+        course_code:
+          type: string
+        course_name:
+          type: string
+        nqf_level:
+          type: integer
